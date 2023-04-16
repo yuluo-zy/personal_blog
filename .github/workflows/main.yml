@@ -17,8 +17,8 @@ jobs:
     - name: npm install
       # 步骤执行指令
       run: npm install
-    - name: npm run build
-      run: npm run build
+    - name: npm run deploy
+      run: npm run deploy
     # 命名这个任务为发布Deploy
     - name: Deploy
       # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
@@ -29,18 +29,12 @@ jobs:
       with:
         host: ${{ secrets.USER_HOST }}
         user: ${{ secrets.USER_NAME }}
-        pass: ${{ secrets.USER_PASS }}
+        key: ${{ secrets.USER_PASS }}
         connect_timeout: 10s
-        local: './dist/*'
-        remote: /www/wwwroot/124.223.218.215
-    - name: nginx restart
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.USER_HOST }}
-        username: ${{ secrets.USER_NAME }}
-        password: ${{ secrets.USER_PASS }}
+        local: './public/*'
+        remote: /www/wwwroot/blog.yuluo.website
         script: |
-           sudo /etc/init.d/nginx stop
-           sudo /etc/init.d/nginx start
+          sudo /etc/init.d/nginx stop
+          sudo /etc/init.d/nginx start
 
       
