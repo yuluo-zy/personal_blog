@@ -1,0 +1,46 @@
+name: Build app and deploy to Tencent
+on:
+  #监听push操作
+  push:
+    branches:
+      - main
+jobs:
+  # 任务ID
+  build:
+    # 运行环境
+    runs-on: ubuntu-latest
+    # 步骤
+    steps:
+    # 使用别人的action
+    - uses: actions/checkout@v2
+    # 步骤名称
+    - name: npm install
+      # 步骤执行指令
+      run: npm install
+    - name: npm run build
+      run: npm run build
+    # 命名这个任务为发布Deploy
+    - name: Deploy
+      # 因为构建之后，需要把代码上传到服务器上，所以需要连接到ssh，并且做一个拷贝操作
+      uses: cross-the-world/scp-pipeline@master
+      env:
+        WELCOME: "ssh scp ssh pipelines"
+        LASTSSH: "Doing something after copying"
+      with:
+        host: ${{ secrets.USER_HOST }}
+        user: ${{ secrets.USER_NAME }}
+        pass: ${{ secrets.USER_PASS }}
+        connect_timeout: 10s
+        local: './dist/*'
+        remote: /www/wwwroot/124.223.218.215
+    - name: nginx restart
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.USER_HOST }}
+        username: ${{ secrets.USER_NAME }}
+        password: ${{ secrets.USER_PASS }}
+        script: |
+           sudo /etc/init.d/nginx stop
+           sudo /etc/init.d/nginx start
+
+      
