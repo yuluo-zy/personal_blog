@@ -29,7 +29,7 @@ jobs:
       with:
         host: ${{ secrets.USER_HOST }}
         user: ${{ secrets.USER_NAME }}
-        key: ${{ secrets.USER_PASS }}
+        password: ${{ secrets.USER_PASS }}
         port: ${{ secrets.USER_PORT}}
         connect_timeout: 10s
         source: './public/*'
