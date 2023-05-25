@@ -28,7 +28,7 @@ type BoxBody = http_body_util::combinators::UnsyncBoxBody<Bytes, Error>;
 
 这一行代码定义了一个类型别名`BoxBody`，它是`http_body_util`包中combinators模块的`UnsyncBoxBody`类型的特化版本。UnsyncBoxBody是一个用于包装异步（不可同步）的HTTP消息体的类型，其中Bytes是表示字节数据的类型，Error是错误类型。
 
-在设计中， 我们的代码主要是跑在 async 中 所以我们需要使用`UnsyncBoxBody`进行包装， 来固定数据。 如果需要进行同步操作 可以尝试 `BoxBody` 类型
+在设计中， 我们的代码主要是跑在 async 中 所以我们需要使用`UnsyncBoxBody`进行包装， 来固定数据。 如果需要进行同步操作 可以尝试 `BoxBody` 类型， '另外UnsyncBoxBody' 内部 是  'Pin<Box<dyn Body<Data = D, Error = E> + Send + 'static>>' send 确保 我们的 数据是可以跨线程传递的
 
 
 ```rust
